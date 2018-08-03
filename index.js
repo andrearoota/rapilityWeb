@@ -1,4 +1,4 @@
-var flag, //Variabile booleana per blocco funzione ricorsiva
+var flag = false, //Variabile booleana per blocco funzione ricorsiva
 signalActive = [false, false, false], //Array booleano per controllo segnali attivi, quindi > 0
 color, //Variabile intera per contenere numero di colori dati in input
 sound, //Variabile intera per contenere numero di suoni dati in input
@@ -8,7 +8,11 @@ delayMin, //Variabile intera per contenere ritardo minimo dato in input
 delayMax, //Variabile intera per contenere ritardo massimo dato in input
 timeShow, //Variabile intera per contenere tempo di visualizzazione del segnale dato in input
 canvas,
-ctx;
+ctx,
+audio_0 = new Audio("sound/single_short_beep.wav"),
+audio_1 = new Audio("sound/double_short_beep.wav"),
+audio_2 = new Audio("sound/single_long_beep.wav"),
+audio_3 = new Audio("sound/single_long_boop.wav");
 
 /* Funzione eseguibile all'evento onClick del btn "start".
   - Inizializzazione delle variabili con dati presi dai tag HTML di input;
@@ -23,7 +27,6 @@ function start() {
   delayMin = Number(document.getElementById("min").value); //Sicurezza che venga inizializzata come INT
   delayMax = Number(document.getElementById("max").value); //Sicurezza che venga inizializzata come INT
   timeShow = Number(document.getElementById("timeShow").value); //Sicurezza che venga inizializzata come INT
-  flag = true; //Impostazione del flag di uscita su TRUE
 
   canvas = document.getElementById("drawZone");
   ctx = canvas.getContext("2d");
@@ -44,6 +47,7 @@ function start() {
   }
   else {
     window.location.href="#drawZone"; //Spostamento focus su drawZone
+    flag = true; //Impostazione del flag di uscita su TRUE
     clear(); //Pulizia drawZone
     countdown(3);
     setTimeout("countdown(2)", 1000);
@@ -65,7 +69,7 @@ function randomSignal() {
       drawColor();
       break;
     case 1:
-
+      playSound();
       break;
     case 2:
       drawPicture();
@@ -151,6 +155,26 @@ function drawPicture () {
   }
 }
 
+/* Funzione per scelta randomica del suono in output */
+function playSound() {
+var tmp = (Math.floor(Math.random() * sound)) + 1;
+
+switch (tmp) {
+  case 1:
+    audio_0.play();
+    break;
+  case 2:
+    audio_1.play();
+    break;
+  case 3:
+    audio_2.play();
+    break;
+  case 4:
+    audio_3.play();
+    break;
+  }
+}
+
 /* Funzione per uscita dalla funzione ricorsiva "randomSignal" */
 function stop() {
   flag = false;
@@ -161,11 +185,17 @@ function resizeCanvas() {
   if (window.innerWidth < window.innerHeight) {
     canvas.width = window.innerWidth;
     canvas.height = canvas.width;
+    //document.getElementById("drawZone").style.width = "100%";
+    //document.getElementById("drawZone").style.height = "auto";
   }
   else {
     canvas.height = window.innerHeight;
     canvas.width = canvas.height;
+    //document.getElementById("drawZone").style.width = "auto";
+    //document.getElementById("drawZone").style.height = "100%";
   }
+  if (flag == true)
+    window.location.href="#drawZone"; //Spostamento focus su drawZone
 }
 
 /* Funzione per countdown iniziale */

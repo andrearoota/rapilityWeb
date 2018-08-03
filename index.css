@@ -1,5 +1,14 @@
 canvas {
-  width: 100%; }
+  width: 100%;
+  position: absolute;
+  margin: auto;
+  right: 0;
+  left: 0; }
+
+  @media screen and (max-height: 767px) and (orientation: landscape) {
+    canvas {
+      width: auto; }
+  }
 
 .row {
   margin-bottom: 20px; }
